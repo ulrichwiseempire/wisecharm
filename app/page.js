@@ -90,9 +90,15 @@ export default function Home() {
               Débloquez des générations illimitées et toutes les énigmes sans restriction.
             </p>
           </div>
-          <button className="mt-6 w-full py-2.5 rounded-lg bg-gradient-to-r from-[#8B1E3F] to-[#C5A059] text-white text-xs font-semibold tracking-wide hover:opacity-90 transition-opacity">
-            S'abonner via Flooz / Yas
-          </button>
+          <a 
+  href="https://wa.me/22872119966?text=Bonjour%20WiseEmpire,%20je%20souhaite%20m'abonner%20au%20Pass%20VIP%20WiseCharm." 
+  target="_blank" 
+  rel="noopener noreferrer"
+  className="mt-6 w-full py-2.5 text-center block rounded-lg bg-gradient-to-r from-amber-500 to-yellow-600 text-black font-semibold text-sm shadow-lg hover:opacity-90 transition-all cursor-pointer"
+>
+  S'abonner via Flooz / Yas 🚀
+</a>
+    
         </div>
 
       </main>
