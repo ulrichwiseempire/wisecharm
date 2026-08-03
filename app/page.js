@@ -4,10 +4,13 @@ export default function Home() {
       
       {/* HEADER / NAVIGATION */}
       <header className="flex items-center justify-between pb-6 border-b border-[#2A2D37]">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#8B1E3F] to-[#C5A059] flex items-center justify-center font-bold text-xs tracking-wider">
-            WC
-          </div>
+        <div className="flex items-center gap-3">
+          {/* Logo Officiel */}
+          <img 
+            src="/logo2.png" 
+            alt="WiseCharm Logo" 
+            className="w-9 h-9 object-contain rounded-lg border border-[#8B1E3F]/30"
+          />
           <span className="font-semibold tracking-wider text-lg uppercase">
             Wise<span className="text-[#C5A059]">Charm</span>
           </span>
@@ -39,7 +42,7 @@ export default function Home() {
         {/* CARTE 1 : GÉNÉRATEUR */}
         <div className="bg-[#16181E] border border-[#2A2D37] rounded-xl p-6 flex flex-col justify-between hover:border-[#8B1E3F] transition-all cursor-pointer group">
           <div>
-            <div className="w-10 h-10 rounded-lg bg-[#8B1E3F]/10 border border-[#8B1E3F]/30 flex items-center justify-center mb-4 text-[#C5A059]">
+            <div className="w-10 h-10 rounded-lg bg-[#8B1E3F]/10 border border-[#8B1E3F]/30 flex items-center justify-center mb-4 text-[#C5A059] font-bold">
               ✦
             </div>
             <h2 className="text-lg font-medium text-white group-hover:text-[#C5A059] transition-colors">
@@ -57,7 +60,7 @@ export default function Home() {
         {/* CARTE 2 : ÉNIGMES & DÉFIS */}
         <div className="bg-[#16181E] border border-[#2A2D37] rounded-xl p-6 flex flex-col justify-between hover:border-[#C5A059] transition-all cursor-pointer group">
           <div>
-            <div className="w-10 h-10 rounded-lg bg-[#C5A059]/10 border border-[#C5A059]/30 flex items-center justify-center mb-4 text-[#C5A059]">
+            <div className="w-10 h-10 rounded-lg bg-[#C5A059]/10 border border-[#C5A059]/30 flex items-center justify-center mb-4 text-[#C5A059] font-bold">
               ◈
             </div>
             <h2 className="text-lg font-medium text-white group-hover:text-[#C5A059] transition-colors">
@@ -93,11 +96,20 @@ export default function Home() {
       </main>
 
       {/* FOOTER */}
-      <footer className="pt-12 pb-6 text-center text-xs text-[#9DA3B4] border-t border-[#2A2D37]/50 mt-12">
+      <footer className="pt-12 pb-6 text-center text-xs text-[#9DA3B4] border-t border-[#2A2D37]/50 mt-12 space-y-3">
         <p>© 2026 WiseCharm. Membre de l'écosystème <span className="text-white">WiseEmpire</span>.</p>
+        <div>
+          <a 
+            href="https://linktr.ee/ulrichwiseempire" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-[#C5A059] hover:underline font-medium transition-colors"
+          >
+            Explorer tout l'univers WiseEmpire ✦
+          </a>
+        </div>
       </footer>
 
     </div>
   )
-        }
-        
+          }
