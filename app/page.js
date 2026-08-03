@@ -71,9 +71,10 @@ export default function Home() {
               Une devinette ou un petit jeu de mots quotidien pour créer de la complicité instantanée.
             </p>
           </div>
-          <button className="mt-6 w-full py-2.5 rounded-lg bg-[#16181E] border border-[#2A2D37] hover:border-[#C5A059] text-white text-xs font-medium tracking-wide transition-colors">
-            Voir le Défi
-          </button>
+          <a href="/challenges" className="mt-6 w-full py-2.5 text-center rounded-lg bg-[#16181E] border border-[#2A2D37] hover:border-[#C5A059] text-white text-xs font-medium tracking-wide transition-colors block">
+  Voir le Défi
+</a>
+          
         </div>
 
         {/* CARTE 3 : ABONNEMENT VIP */}
