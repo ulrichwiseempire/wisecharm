@@ -52,9 +52,10 @@ export default function Home() {
               Inspiration sur mesure pour un premier contact, une répartie fine ou raviver la flamme.
             </p>
           </div>
-          <button className="mt-6 w-full py-2.5 rounded-lg bg-[#8B1E3F] hover:bg-[#8B1E3F]/80 text-white text-xs font-medium tracking-wide transition-colors">
-            Ouvrir le Générateur
-          </button>
+          <a href="/generator" className="mt-6 w-full py-2.5 text-center rounded-lg bg-[#8B1E3F] hover:bg-[#8B1E3F]/80 text-white text-xs font-medium tracking-wide transition-colors block">
+  Ouvrir le Générateur
+</a>
+        
         </div>
 
         {/* CARTE 2 : ÉNIGMES & DÉFIS */}
