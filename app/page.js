@@ -75,6 +75,7 @@ export default function Home() {
           </a>
         </div>
 
+  
   {/* CARTE 3 : ABONNEMENT VIP / TARIFS */}
 <div className="bg-gradient-to-b from-[#1F2833] to-[#121318] border border-amber-500/40 rounded-2xl p-6 space-y-6 shadow-xl flex flex-col justify-between">
   <div className="text-center space-y-1">
@@ -129,11 +130,10 @@ export default function Home() {
     rel="noopener noreferrer"
     className="w-full py-3 text-center block rounded-xl bg-gradient-to-r from-amber-500 to-yellow-600 text-black font-extrabold text-sm shadow-lg hover:opacity-90 transition-all cursor-pointer"
   >
-    S'abonner via Flooz / Yas 
+    S'abonner via Flooz / Yas 🚀
   </a>
 </div>
   
-
   
           
       
