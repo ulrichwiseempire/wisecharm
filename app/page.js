@@ -1,11 +1,24 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [vipModalOpen, setVipModalOpen] = useState(false);
   const [activeModal, setActiveModal] = useState(null);
   const [activeTab, setActiveTab] = useState('explore');
+
+  // Nom dynamique par défaut pour chaque nouvel utilisateur qui clique sur le lien
+  const [user, setUser] = useState({
+    name: 'Mon Amour',
+    initial: 'M'
+  });
+
+  useEffect(() => {
+    const savedName = localStorage.getItem('wisecharm_username');
+    if (savedName) {
+      setUser({ name: savedName, initial: savedName.charAt(0).toUpperCase() });
+    }
+  }, []);
 
   const discoveryModes = [
     { id: 'crush', title: 'Crush', desc: 'Flirtez entre rires et discussions profondes.', badge: 'GRATUIT', badgeColor: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', bg: 'bg-[#14101f]', emoji: '😊', content: "« Qu'est-ce qui t'a fait craquer en premier chez quelqu'un ? » — Discutez-en avec légèreté !" },
@@ -61,7 +74,7 @@ export default function Home() {
         </div>
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-white">
-            Hey Ulrich, quel mood ?
+            Hey {user.name}, quel mood ?
           </h1>
           <p className="text-xs text-purple-400 mt-0.5">Explorez des inspirations et des instants précieux.</p>
         </div>
@@ -118,7 +131,7 @@ export default function Home() {
           </div>
           <span className="text-amber-300 text-xl font-bold group-hover:translate-x-1 transition-transform">›</span>
         </div>
-                    {/* Couple */}
+             {/* Couple */}
         <div>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xs font-bold uppercase tracking-widest text-purple-400/80">En couple</h2>
@@ -219,16 +232,16 @@ export default function Home() {
               <div className="flex items-center justify-between pb-6 border-b border-purple-500/10">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 to-pink-600 text-white flex items-center justify-center font-bold">
-                    U
+                    {user.initial}
                   </div>
                   <div>
-                    <h4 className="font-bold text-sm text-white">Ulrich</h4>
+                    <h4 className="font-bold text-sm text-white">{user.name}</h4>
                     <p className="text-[10px] text-purple-400">Membre WiseEmpire</p>
                   </div>
                 </div>
                 <button 
                   onClick={() => setSidebarOpen(false)}
-                  className="w-8 h-8 rounded-full bg-purple-950 flex items-center justify-center text-xs font-bold text-purple-300 hover:bg-purple-900"
+                  className="w-8 h-8 rounded-full bg-purple-950 flex items-center justify-center text-xs font-bold text-purple-300 hover:bg-purple-900 cursor-pointer"
                 >
                   ✕
                 </button>
@@ -255,16 +268,17 @@ export default function Home() {
             </div>
 
             <div className="space-y-4">
+              {/* Carte VIP Sidebar harmonisée en violet/rose sombre */}
               <div 
                 onClick={() => { setSidebarOpen(false); setVipModalOpen(true); }}
-                className="bg-gradient-to-r from-amber-500/20 to-yellow-600/20 border border-amber-500/30 rounded-2xl p-4 cursor-pointer shadow-lg space-y-2 hover:bg-amber-500/30 transition"
+                className="bg-gradient-to-r from-purple-950/80 via-purple-900/60 to-pink-950/80 border border-purple-500/40 rounded-2xl p-4 cursor-pointer shadow-lg space-y-2 hover:border-purple-400 transition"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-extrabold text-amber-400 uppercase">👑 GO PREMIUM</span>
+                  <span className="text-xs font-extrabold text-amber-400 uppercase tracking-wider">👑 GO PREMIUM</span>
                   <span>✨</span>
                 </div>
                 <p className="text-[11px] text-purple-200">Débloquez l'accès illimité à tous les packs.</p>
-                <button className="w-full py-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-stone-950 font-bold text-xs rounded-xl shadow">
+                <button className="w-full py-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-stone-950 font-bold text-xs rounded-xl shadow cursor-pointer hover:opacity-90 transition">
                   Activer mon pass
                 </button>
               </div>
@@ -385,5 +399,4 @@ export default function Home() {
 
     </div>
   );
-                          }
-            
+            }
