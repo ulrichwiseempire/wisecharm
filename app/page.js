@@ -4,21 +4,38 @@ import { useState, useEffect } from 'react';
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [vipModalOpen, setVipModalOpen] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [activeModal, setActiveModal] = useState(null);
   const [activeTab, setActiveTab] = useState('explore');
 
-  // Nom dynamique par défaut pour chaque nouvel utilisateur qui clique sur le lien
-  const [user, setUser] = useState({
-    name: 'Mon Amour',
-    initial: 'M'
-  });
+  // État utilisateur connecté (null par défaut, se remplit après connexion)
+  const [user, setUser] = useState(null);
+  const [inputName, setInputName] = useState('');
 
   useEffect(() => {
-    const savedName = localStorage.getItem('wisecharm_username');
-    if (savedName) {
-      setUser({ name: savedName, initial: savedName.charAt(0).toUpperCase() });
+    const savedUser = localStorage.getItem('wisecharm_user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
     }
   }, []);
+
+  const handleLogin = (provider, nameToUse) => {
+    const finalName = nameToUse || inputName || "Utilisateur";
+    const userData = {
+      name: finalName,
+      initial: finalName.charAt(0).toUpperCase(),
+      provider: provider
+    };
+    setUser(userData);
+    localStorage.setItem('wisecharm_user', JSON.stringify(userData));
+    setLoginModalOpen(false);
+    setInputName('');
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('wisecharm_user');
+  };
 
   const discoveryModes = [
     { id: 'crush', title: 'Crush', desc: 'Flirtez entre rires et discussions profondes.', badge: 'GRATUIT', badgeColor: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', bg: 'bg-[#14101f]', emoji: '😊', content: "« Qu'est-ce qui t'a fait craquer en premier chez quelqu'un ? » — Discutez-en avec légèreté !" },
@@ -65,19 +82,32 @@ export default function Home() {
         </button>
       </header>
 
-      {/* GREETING */}
-      <section className="px-6 py-4 max-w-xl mx-auto flex items-center gap-4">
-        <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-purple-600 to-pink-500 p-0.5 shadow-lg shadow-purple-900/30">
-          <div className="w-full h-full bg-[#0b0813] rounded-full flex items-center justify-center">
-            <span className="text-2xl">✨</span>
+      {/* GREETING (S'adapte si connecté ou invite à se connecter) */}
+      <section className="px-6 py-4 max-w-xl mx-auto flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-purple-600 to-pink-500 p-0.5 shadow-lg shadow-purple-900/30">
+            <div className="w-full h-full bg-[#0b0813] rounded-full flex items-center justify-center">
+              <span className="text-2xl">{user ? user.initial : '✨'}</span>
+            </div>
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-white">
+              {user ? `Hey ${user.name} !` : 'Hey, quel mood ?'}
+            </h1>
+            <p className="text-xs text-purple-400 mt-0.5">
+              {user ? 'ravi de te revoir sur WiseCharm.' : 'Explorez des inspirations et des instants précieux.'}
+            </p>
           </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">
-            Hey {user.name}, quel mood ?
-          </h1>
-          <p className="text-xs text-purple-400 mt-0.5">Explorez des inspirations et des instants précieux.</p>
-        </div>
+
+        {!user && (
+          <button 
+            onClick={() => setLoginModalOpen(true)}
+            className="text-xs font-bold px-3 py-2 rounded-xl bg-purple-900/60 border border-purple-500/30 text-white hover:bg-purple-800 transition cursor-pointer shrink-0"
+          >
+            Se connecter
+          </button>
+        )}
       </section>
 
       {/* MAIN CONTENT */}
@@ -131,7 +161,7 @@ export default function Home() {
           </div>
           <span className="text-amber-300 text-xl font-bold group-hover:translate-x-1 transition-transform">›</span>
         </div>
-             {/* Couple */}
+              {/* Couple */}
         <div>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xs font-bold uppercase tracking-widest text-purple-400/80">En couple</h2>
@@ -219,7 +249,7 @@ export default function Home() {
         </button>
       </nav>
 
-      {/* SIDEBAR */}
+      {/* SIDEBAR (Instagram pointe vers le compte de l'entreprise) */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 flex">
           <div 
@@ -232,11 +262,11 @@ export default function Home() {
               <div className="flex items-center justify-between pb-6 border-b border-purple-500/10">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 to-pink-600 text-white flex items-center justify-center font-bold">
-                    {user.initial}
+                    {user ? user.initial : '👤'}
                   </div>
                   <div>
-                    <h4 className="font-bold text-sm text-white">{user.name}</h4>
-                    <p className="text-[10px] text-purple-400">Membre WiseEmpire</p>
+                    <h4 className="font-bold text-sm text-white">{user ? user.name : 'Visiteur'}</h4>
+                    <p className="text-[10px] text-purple-400">{user ? 'Membre connecté' : 'Non connecté'}</p>
                   </div>
                 </div>
                 <button 
@@ -252,8 +282,9 @@ export default function Home() {
                   <span>📩 Nous contacter</span>
                   <span className="text-purple-500">›</span>
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-xl hover:bg-purple-950/50 transition text-sm text-purple-200 font-medium">
-                  <span>📸 Instagram</span>
+                {/* Lien Instagram de l'entreprise */}
+                <a href="https://instagram.com/ton_entreprise" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-xl hover:bg-purple-950/50 transition text-sm text-purple-200 font-medium">
+                  <span>📸 Instagram (WiseEmpire)</span>
                   <span className="text-purple-500">›</span>
                 </a>
                 <a href="https://wa.me/?text=Découvre%20WiseCharm,%20l'application%20ultime%20de%20charme%20et%20de%20connexion%20!" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-xl hover:bg-purple-950/50 transition text-sm text-purple-200 font-medium">
@@ -268,7 +299,23 @@ export default function Home() {
             </div>
 
             <div className="space-y-4">
-              {/* Carte VIP Sidebar harmonisée en violet/rose sombre */}
+              {user ? (
+                <button 
+                  onClick={handleLogout}
+                  className="w-full py-2.5 bg-rose-500/10 border border-rose-500/30 text-rose-400 font-bold text-xs rounded-xl hover:bg-rose-500/20 transition cursor-pointer"
+                >
+                  Se déconnecter
+                </button>
+              ) : (
+                <button 
+                  onClick={() => { setSidebarOpen(false); setLoginModalOpen(true); }}
+                  className="w-full py-2.5 bg-purple-700 hover:bg-purple-600 text-white font-bold text-xs rounded-xl shadow transition cursor-pointer"
+                >
+                  Se connecter / S'inscrire
+                </button>
+              )}
+
+              {/* Carte VIP Sidebar */}
               <div 
                 onClick={() => { setSidebarOpen(false); setVipModalOpen(true); }}
                 className="bg-gradient-to-r from-purple-950/80 via-purple-900/60 to-pink-950/80 border border-purple-500/40 rounded-2xl p-4 cursor-pointer shadow-lg space-y-2 hover:border-purple-400 transition"
@@ -288,6 +335,59 @@ export default function Home() {
                 <p className="text-[10px] text-rose-400 cursor-pointer hover:underline">Supprimer mon compte</p>
                 <p className="text-[9px] text-purple-500 mt-2">WiseCharm v2.0.0 — WiseEmpire</p>
               </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* LOGIN MODAL (Connexion Google / Email) */}
+      {loginModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-md" onClick={() => setLoginModalOpen(false)}></div>
+          <div className="relative bg-[#161122] border border-purple-500/40 rounded-3xl p-6 w-full max-w-md shadow-2xl z-10 space-y-5 text-center">
+            
+            <button 
+              onClick={() => setLoginModalOpen(false)}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white hover:bg-white/20 cursor-pointer"
+            >
+              ✕
+            </button>
+
+            <div className="space-y-1">
+              <h3 className="text-xl font-black text-white">Rejoignez WiseCharm</h3>
+              <p className="text-xs text-purple-300">Connectez-vous pour afficher votre profil et sauvegarder vos préférences.</p>
+            </div>
+
+            <div className="space-y-3 pt-2">
+              {/* Bouton Connexion Google (Simulé ou prêt pour Firebase/NextAuth) */}
+              <button 
+                onClick={() => handleLogin('Google', 'Ulrich')}
+                className="w-full py-3 px-4 bg-white text-stone-900 font-bold text-xs rounded-xl shadow flex items-center justify-center gap-3 hover:bg-purple-100 transition cursor-pointer"
+              >
+                <span>🌐</span> Continuer avec Google
+              </button>
+
+              <div className="relative flex py-2 items-center">
+                <div className="flex-grow border-t border-purple-500/20"></div>
+                <span className="flex-shrink mx-4 text-[10px] text-purple-400 uppercase tracking-widest">ou avec votre pseudo</span>
+                <div className="flex-grow border-t border-purple-500/20"></div>
+              </div>
+
+              <input 
+                type="text" 
+                placeholder="Entrez votre prénom ou pseudo..." 
+                value={inputName}
+                onChange={(e) => setInputName(e.target.value)}
+                className="w-full px-4 py-3 bg-purple-950/60 border border-purple-500/30 rounded-xl text-xs text-white placeholder-purple-400 focus:outline-none focus:border-purple-500"
+              />
+
+              <button 
+                onClick={() => handleLogin('Email', inputName)}
+                className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-xs rounded-xl shadow-lg transition cursor-pointer hover:opacity-90"
+              >
+                Valider ma connexion 🚀
+              </button>
             </div>
 
           </div>
@@ -399,4 +499,5 @@ export default function Home() {
 
     </div>
   );
-            }
+                          }
+          
